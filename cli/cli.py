@@ -3,7 +3,6 @@
 import sys
 import click
 import requests
-from setuptools import setup
 
 @click.command()
 @click.option('--amount', nargs=1, type=float)

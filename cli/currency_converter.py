@@ -3,6 +3,7 @@
 # import sys
 import click
 import requests
+import json
 
 @click.command()
 @click.option('--amount', nargs=1, type=float)
@@ -43,7 +44,7 @@ def main(amount, input_currency, output_currency):
     # Convert 
 
     if output_currency:
-        print({
+        print(json.dumps({
             "input": {
                 "amount": amount,
                 "currency": input_currency,
@@ -52,7 +53,7 @@ def main(amount, input_currency, output_currency):
             "output": {
                 output_currency: round(data['rates'][output_currency] * amount, 2),
             }
-        })
+        }, indent=4))
 
     else:
         currencies = data['rates']
@@ -61,15 +62,15 @@ def main(amount, input_currency, output_currency):
             del currencies[input_currency]
 
         for output_currency in currencies:
-            new_currencies = [{i: round(v * amount, 2) for i, v in currencies.items()}]
+            new_currencies = {i: round(v * amount, 2) for i, v in currencies.items()}
 
-        print({ 
+        print(json.dumps({ 
             "input": {
                 "amount": amount,
                 "currency": input_currency,
             },
             "output": new_currencies
-        })
+        }, indent=4))
 
 if __name__ == "__main__":
     main()

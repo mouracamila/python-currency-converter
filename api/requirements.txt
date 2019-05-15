@@ -1,2 +1,5 @@
+python =< 3
 flask
 flask-restful
+request
+

@@ -11,40 +11,50 @@ parser.add_argument('amount')
 parser.add_argument('input_currency')
 parser.add_argument('output_currency')
 
-
 class CurrencyConverter(Resource):
     def get(self):
 
         args = parser.parse_args()
 
-        amount = args.get('amount')
-        input_currency = args.get('input_currency')
-        output_currency = args.get('output_currency')
+        amount = args.get('amount')        
+        input_currency = args.get('input_currency')                
+        output_currency = args.get('output_currency')        
 
-        # Fails
+        # report errors args    
+        if output_currency:
+            output_currency = output_currency.upper().strip()
+
         if not input_currency:
-            return {"error": "input_currency required"}
+            return {"error": "input_currency required"}, 400
+
+        input_currency = input_currency.upper().strip()
          
         if not amount:
-            return {"error": "amount required"}
+            return {"error": "invalid amount"}, 400
         
         amount = float(amount)
 
         if amount <= 0:
-            return {"error": "amount invalid"}
+            return {"Bad Request": "Error 400"}
 
         # Get data currency  
+
         url = "https://api.exchangerate-api.com/v4/latest/{}".format(input_currency)
         resp = requests.get(url)
 
-        if resp.status_code != 200:
-            
-            return {"error": "API error"}
-        
-        # Convert 
         data = resp.json()
 
-        if output_currency:
+        if resp.status_code != 200:
+            return {"error": "Remote API server error"}, resp.status_code
+        
+        # Convert
+
+        if output_currency and output_currency not in data['rates']:
+
+            return {"error": "Invalid output_currencty"}, 400
+
+        elif output_currency:
+
             return {
                 "input": {
                     "amount": amount,

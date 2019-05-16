@@ -2,4 +2,5 @@ python =< 3
 flask
 flask-restful
 request
+click == 7.0
 

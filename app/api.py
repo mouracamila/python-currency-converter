@@ -1,6 +1,6 @@
 import requests
-from flask import Flask, jsonify
-from flask_restful import Resource, reqparse, Api, abort
+from flask import Flask
+from flask_restful import Resource, reqparse, Api
 
 # Create the application instance
 app = Flask(__name__)

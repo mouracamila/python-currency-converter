@@ -21,11 +21,14 @@ def currency_converter(amount, input_currency, output_currency=None):
         return {"error": "Input Currency Required"}, 400    
   
     # if input_currency simbol
-    currency_mapping = {'$': 'USD', 'R$': 'BRL', '€': 'EUR', '£': 'GBP'}
+    currency_mapping = {'$': 'USD', 'R$': 'BRL', '€': 'EUR', '£': 'GBP', ' ¥': 'JPY', 'CA$': 'CAD', 'Kč': 'CZK'}
     
     if input_currency in currency_mapping:
         input_currency = currency_mapping.get(input_currency)
-        
+    
+    if output_currency in currency_mapping:
+        output_currency = currency_mapping.get(output_currency)    
+    
     if not amount:
         return {"error": "Invalid Amount"}, 400
     
@@ -33,6 +36,7 @@ def currency_converter(amount, input_currency, output_currency=None):
 
     if amount <= 0:
         return {"Bad Request": "Error 400"}
+
 
     # Get data currency  
 
@@ -45,12 +49,10 @@ def currency_converter(amount, input_currency, output_currency=None):
     if resp.status_code != 200:
         return {"error": "Remote API Server Error"}, resp.status_code
     
-    # Convert
-
     if output_currency and output_currency not in data['rates']:
 
         return {"error": "Invalid Output Currency"}, 400
-
+    # Convert
     elif output_currency:
 
         return {

@@ -11,15 +11,20 @@ parser.add_argument('amount')
 parser.add_argument('input_currency')
 parser.add_argument('output_currency')
 
+
 def currency_converter(amount, input_currency, output_currency=None):
-
-    if output_currency:
-        output_currency = output_currency.upper().strip()
-
-    if not input_currency:
-        return {"error": "Input Currency Required"}, 400
-
+   
     input_currency = input_currency.upper().strip()
+    
+    # if input currency code:   
+    if not input_currency:
+        return {"error": "Input Currency Required"}, 400    
+  
+    # if input_currency simbol
+    currency_mapping = {'$': 'USD', 'R$': 'BRL', '€': 'EUR', '£': 'GBP'}
+    
+    if input_currency in currency_mapping:
+        input_currency = currency_mapping.get(input_currency)
         
     if not amount:
         return {"error": "Invalid Amount"}, 400
@@ -31,7 +36,8 @@ def currency_converter(amount, input_currency, output_currency=None):
 
     # Get data currency  
 
-    url = "https://api.exchangerate-api.com/v4/latest/{}".format(input_currency)
+    url = "https://api.exchangerate-api.com/v4/latest/{}".format(
+        input_currency)
     resp = requests.get(url)
 
     data = resp.json()
@@ -76,21 +82,20 @@ def currency_converter(amount, input_currency, output_currency=None):
             "output": new_currencies
         }
 
-class CurrencyConverter(Resource):
-   
+
+class CurrencyConverter(Resource):   
     def get(self):
 
         args = parser.parse_args()
 
         amount = args.get('amount')        
         input_currency = args.get('input_currency')                
-        output_currency = args.get('output_currency')
- 
+        output_currency = args.get('output_currency') 
         return currency_converter(amount, input_currency, output_currency)
-            
+
 
 api.add_resource(CurrencyConverter, '/currency_converter')
 
 # If we're running in stand alone mode, run the application
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

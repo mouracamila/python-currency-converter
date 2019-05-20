@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import requests
 from flask import Flask
 from flask_restful import Resource, reqparse, Api
@@ -25,9 +27,9 @@ def currency_converter(amount, input_currency, output_currency=None):
 
     # if input_currency symbol
     currency_mapping = {
-        '$': 'USD', 'R$': 'BRL', '€': 'EUR', '£': 'GBP',
-        '¥': 'JPY', 'CA$': 'CAD', 'Kč': 'CZK', 'AU$': 'AUD',
-        'HK$': 'HKD', 'MX$': 'MXN', 'NZ$': 'NZD', 'zł': 'PLN',
+        '$': 'USD', 'R$': 'BRL', u'€': 'EUR', u'£': 'GBP',
+        u'¥': 'JPY', 'CA$': 'CAD', u'Kč': 'CZK', 'AU$': 'AUD',
+        'HK$': 'HKD', 'MX$': 'MXN', 'NZ$': 'NZD', u'zł': 'PLN',
         }
 
     if input_currency in currency_mapping:
@@ -57,6 +59,7 @@ def currency_converter(amount, input_currency, output_currency=None):
     if output_currency and output_currency not in data['rates']:
 
         return {"error": "Invalid Output Currency"}, 400
+
     # Convert
     elif output_currency:
 
@@ -107,4 +110,4 @@ api.add_resource(CurrencyConverter, '/currency_converter')
 
 # If we're running in stand alone mode, run the application
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

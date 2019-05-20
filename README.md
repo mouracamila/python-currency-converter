@@ -25,8 +25,33 @@ Parameters
 
 Obs: When the exit currency is not declared, it is converted to the entire known currency.
 
+# Installation
+
+1. Clone the project
+2. Access the `app` folder:
+
+    `$ cd app`
+
+2. Execute the
+
+    `$ pip3 install -r requirements.txt`
+
+## Run the Flask App
+
+```$ python3 app/api.py```
+
+
+## Run the CLI
+
+```$ ./currency_converter.py --amount <float|int> --input_currency <string> --output_currency <string>```
+
+- `--amount` accepts only float or integers
+- `--input_currency` accepts 3 letters strings or currency symbols
+- `--output_currency` accepts 3 letters strings or currency symbols (optional)
+
 # Output
-- json struture:
+
+## JSON struture:
 
 ```
 {
@@ -38,10 +63,13 @@ Obs: When the exit currency is not declared, it is converted to the entire known
         <Currency Code>: <float>
     }
 }
+
 ```
-# Exemples
-CLI
--
+# Examples
+
+## CLI
+
+
 ```
 ./currency_converter.py --amount 100.0 --input_currency EUR --output_currency CZK
 {
@@ -54,6 +82,7 @@ CLI
     }
 }
 ```
+
 ```
 ./currency_converter.py --amount 0.9 --input_currency ¥ --output_currency AUD
 {
@@ -66,6 +95,7 @@ CLI
     }
 }
 ```
+
 ```
 ./currency_converter.py --amount 10.92 --input_currency £
 {
@@ -84,8 +114,10 @@ CLI
     ]
 }
 ```
- API
--
+
+## API
+
+
 ```
 GET /currency_converter?amount=0.9&input_currency=au$&output_currency=brl HTTP/1.1
 {
@@ -98,6 +130,7 @@ GET /currency_converter?amount=0.9&input_currency=au$&output_currency=brl HTTP/1
     }
 }
 ```
+
 ```
 GET /currency_converter?amount=0.9&input_currency=CA$&output_currency= HTTP/1.1
 {

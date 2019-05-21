@@ -4,7 +4,6 @@ import requests
 from flask import Flask
 from flask_restful import Resource, reqparse, Api
 
-# Create the application instance
 app = Flask(__name__)
 api = Api(app)
 
@@ -21,11 +20,9 @@ def currency_converter(amount, input_currency, output_currency=None):
     if output_currency:
         output_currency = output_currency.upper().strip()
 
-    # if input currency code:
     if not input_currency:
         return {"error": "Input Currency Required"}, 400
 
-    # if input_currency symbol
     currency_mapping = {
         '$': 'USD', 'R$': 'BRL', u'€': 'EUR', u'£': 'GBP',
         u'¥': 'JPY', 'CA$': 'CAD', u'Kč': 'CZK', 'AU$': 'AUD',
@@ -46,7 +43,6 @@ def currency_converter(amount, input_currency, output_currency=None):
     if amount <= 0:
         return {"Bad Request": "Error 400"}
 
-    # Get data currency
     url = "https://api.exchangerate-api.com/v4/latest/{}".format(
         input_currency)
     resp = requests.get(url)
@@ -60,7 +56,6 @@ def currency_converter(amount, input_currency, output_currency=None):
 
         return {"error": "Invalid Output Currency"}, 400
 
-    # Convert
     elif output_currency:
 
         return {
@@ -108,6 +103,5 @@ class CurrencyConverter(Resource):
 
 api.add_resource(CurrencyConverter, '/currency_converter')
 
-# If we're running in stand alone mode, run the application
 if __name__ == '__main__':
     app.run(debug=True)
